@@ -22,9 +22,10 @@ public class FirstProjectApplication {
         SpringApplication.run(FirstProjectApplication.class, args);
     }
 
-    @PostMapping("/names")
-    public Name addName(@RequestBody Name name) {
-        return namesRepository.save(name);
+    @PostMapping("/addname")
+    public Name addName(@RequestParam(value = "newName", defaultValue = "Placeholder") String name) {
+
+        return namesRepository.save(new Name(name));
     }
 
     @GetMapping("/names")
@@ -44,6 +45,14 @@ public class FirstProjectApplication {
         private Long id;
 
         private String name;
+
+        public Long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
 
         protected Name(){}
     }
