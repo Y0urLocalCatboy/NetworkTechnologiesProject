@@ -14,9 +14,6 @@ import java.util.List;
 @RestController
 public class FirstProjectApplication {
 
-    @Autowired
-    private DrugRepository drugsRepository;
-
     public static void main(String[] args) {
         SpringApplication.run(FirstProjectApplication.class, args);
     }

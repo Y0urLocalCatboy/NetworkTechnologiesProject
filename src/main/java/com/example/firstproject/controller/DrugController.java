@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.firstproject.*;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @RestController
@@ -18,6 +18,11 @@ import java.util.List;
 public class DrugController {
 
     private DrugService drugService;
+
+    @Autowired
+    public DrugController(DrugService drugService) {
+        this.drugService = drugService;
+    }
 
     @GetMapping()
     public List<GetDrugDto> getAllDrugs() {
