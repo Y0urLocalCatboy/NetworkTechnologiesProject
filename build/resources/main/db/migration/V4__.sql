@@ -28,3 +28,17 @@ CREATE TABLE workers
     salary        DOUBLE       NULL,
     CONSTRAINT pk_workers PRIMARY KEY (id)
 );
+
+CREATE TABLE firstproject.drugs
+(
+    id            BIGINT AUTO_INCREMENT NOT NULL,
+    name          VARCHAR(255)          NULL,
+    `description` VARCHAR(255)          NULL,
+    price         DOUBLE                NULL,
+    quantity      INT                   NULL,
+    manufacturer  VARCHAR(255)          NULL,
+    CONSTRAINT pk_drugs PRIMARY KEY (id)
+);
+
+ALTER TABLE firstproject.drugs
+    ADD CONSTRAINT uc_drugs_name UNIQUE (name);

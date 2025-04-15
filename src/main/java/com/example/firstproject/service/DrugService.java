@@ -1,7 +1,10 @@
 package com.example.firstproject.service;
 
+import com.example.firstproject.controller.dto.CreateDrugDto;
 import com.example.firstproject.controller.dto.CreateDrugResponseDto;
+import com.example.firstproject.controller.dto.DrugDto;
 import com.example.firstproject.controller.dto.GetDrugDto;
+import com.example.firstproject.service.models.DrugModel;
 import com.example.firstproject.structure.entity.DrugEntity;
 import com.example.firstproject.structure.repository.DrugRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,4 +62,21 @@ public class DrugService {
         drugRepository.deleteById(id);
     }
 
+    public DrugDto create(CreateDrugDto drug) {
+        var drugModel = new DrugModel(null, drug.getName(), drug.getDescription(), drug.getPrice());
+
+        var drugEntity = new DrugEntity();
+        drugEntity.setName(drugModel.getName());
+        drugEntity.setDescription(drugModel.getDescription());
+        drugEntity.setPrice(drugModel.getPrice());
+
+        drugRepository.save(drugEntity);
+
+        return new DrugDto(
+                drugEntity.getId(),
+                drugEntity.getName(),
+                drugEntity.getPrice(),
+                drugEntity.getDescription()
+        );
+    }
 }
