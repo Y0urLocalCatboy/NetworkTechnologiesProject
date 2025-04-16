@@ -1,5 +1,6 @@
 package com.example.firstproject.controller.dto;
 
+import com.example.firstproject.service.valueObjects.Name;
 import com.example.firstproject.service.valueObjects.Price;
 
 public class CreateDrugResponseDto {
@@ -18,11 +19,11 @@ public class CreateDrugResponseDto {
 
     public CreateDrugResponseDto(Long id, String name, String description, Double price, Integer quantity, String manufacturer) {
         this.id = id;
-        this.name = name;
+        this.name = Name.create(name).getValue();
         this.description = description;
         this.price = Price.create(price).getValue();
         this.quantity = quantity;
-        this.manufacturer = manufacturer;
+        this.manufacturer = Name.create(manufacturer).getValue();
     }
 
     public Long getId() {

@@ -1,12 +1,12 @@
 package com.example.firstproject.service.models;
 
+import com.example.firstproject.service.valueObjects.Description;
+import com.example.firstproject.service.valueObjects.Name;
 import com.example.firstproject.service.valueObjects.Price;
 
 public class DrugModel {
 
-    /**
-     * if that would be a DrugModel there would be an ID
-     */
+
     private Long id;
 
     private String name;
@@ -28,7 +28,7 @@ public class DrugModel {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = Name.create(name).getValue();
     }
 
     public String getDescription() {
@@ -36,7 +36,7 @@ public class DrugModel {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = Description.create(description).getValue();
     }
 
     public Double getPrice() {
