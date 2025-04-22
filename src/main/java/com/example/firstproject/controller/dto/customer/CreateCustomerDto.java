@@ -1,19 +1,13 @@
-package com.example.firstproject.service.models;
+package com.example.firstproject.controller.dto.customer;
 
-public class CustomerModel {
+import jakarta.validation.constraints.Size;
 
-    private Long id;
+public class CreateCustomerDto {
+    @Size(min = 1, max = 50, message = "Name must be between 1 and 50 characters")
     private String name;
+    @Size(min = 1, max = 50, message = "Surname must be between 1 and 50 characters")
     private String surname;
     private String email;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -36,13 +30,6 @@ public class CustomerModel {
     }
 
     public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public CustomerModel(Long id, String name, String surname, String email) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
         this.email = email;
     }
 }

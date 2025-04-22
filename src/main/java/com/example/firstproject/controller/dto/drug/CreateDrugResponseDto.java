@@ -1,4 +1,4 @@
-package com.example.firstproject.controller.dto;
+package com.example.firstproject.controller.dto.drug;
 
 import com.example.firstproject.service.valueObjects.Name;
 import com.example.firstproject.service.valueObjects.Price;

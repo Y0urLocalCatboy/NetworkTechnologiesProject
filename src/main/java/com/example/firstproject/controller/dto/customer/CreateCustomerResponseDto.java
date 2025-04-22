@@ -1,35 +1,26 @@
-package com.example.firstproject.structure.entity;
+package com.example.firstproject.controller.dto.customer;
 
-import jakarta.persistence.*;
+import com.example.firstproject.service.valueObjects.Name;
+import com.example.firstproject.service.valueObjects.Price;
 
-@Entity
-@Table(name = "customers")
-public class CustomerEntity {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
+public class CreateCustomerResponseDto {
     private Long id;
 
-    @Basic
-    @Column(name = "name")
     private String name;
 
-    @Basic
-    @Column(name = "surname")
     private String surname;
 
-    @Basic
-    @Column(name = "email")
     private String email;
 
-    @Basic
-    @Column(name = "password")
     private String password;
 
-    @Basic
-    @Column(name = "Shopcart")
-    private String shopcart = "";
+    public CreateCustomerResponseDto(Long id, String name, String surname, String email, String password) {
+        this.id = id;
+        this.name = Name.create(name).getValue();
+        this.surname = Name.create(surname).getValue();
+        this.email = email;
+        this.password = password;
+    }
 
     public String getPassword() {
         return password;
@@ -69,13 +60,5 @@ public class CustomerEntity {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getShopcart() {
-        return shopcart;
-    }
-
-    public void setShopcart(String shopcart) {
-        this.shopcart = shopcart;
     }
 }

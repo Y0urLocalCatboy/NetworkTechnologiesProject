@@ -1,42 +1,34 @@
 package com.example.firstproject.controller;
 
 
+import com.example.firstproject.controller.dto.customer.CreateCustomerDto;
+import com.example.firstproject.controller.dto.customer.CreateCustomerResponseDto;
+import com.example.firstproject.controller.dto.customer.GetCustomerDto;
+import com.example.firstproject.service.CustomerService;
 import com.example.firstproject.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 public class CustomerController {
 
-    private final JwtService jwtService;
+    private final CustomerService customerService;
 
     @Autowired
-    public CustomerController(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
-    @RequestMapping(value = "/{id}")
-    public String getCustomer() {
-        // user dto
-        // user service
-        // user entity
-        // user repository
-        // return user from db with id
-        return "User data";
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
-    @PostMapping()
-    public CreateCustomerDto createCustomer(){
-        // create user dto
-        //crete user in service, validate data
-        // return user login dto with token
+
+    @RequestMapping(value = "/{id}")
+    public GetCustomerDto getCustomer(@PathVariable Long id) {
+        return customerService.getCustomerById(id);
     }
-    @PostMapping("/login")
-    public String loginCustomer(){
-        // create user dto
-        // validate user in service
-        // return user login dto with token
+
+
+    @PostMapping()
+    public CreateCustomerResponseDto createCustomer(@RequestBody CreateCustomerResponseDto createCustomerResponseDto) {
+        return customerService.createCustomer(createCustomerResponseDto);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.firstproject.controller.dto;
+package com.example.firstproject.controller.dto.drug;
 
 public class DrugDto {
 

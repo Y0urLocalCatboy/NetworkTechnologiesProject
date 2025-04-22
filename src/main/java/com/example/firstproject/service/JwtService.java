@@ -9,11 +9,13 @@ import java.util.Date;
 //use login dto as input
 @Service
 public class JwtService {
+
     private final String SECRET = "secretkdsafsadfasfsaffsafsafsafsafsafvxasfakfjsahgjaey";
     private final long TOKEN_VALIDITY = 1000*60*60;
-    public String createToken(String username){
+
+    public String createToken(String email){
         long now = System.currentTimeMillis();
-        var token = Jwts.builder().subject(username)
+        var token = Jwts.builder().subject(email)
                 .claim("roles","Customer")
                 .issuedAt(new Date(now))
                 .expiration(new Date(now+(TOKEN_VALIDITY)))

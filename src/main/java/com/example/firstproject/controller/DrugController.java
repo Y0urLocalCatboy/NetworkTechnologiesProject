@@ -1,16 +1,12 @@
 package com.example.firstproject.controller;
 
-import com.example.firstproject.FirstProjectApplication;
-import com.example.firstproject.controller.dto.CreateDrugDto;
-import com.example.firstproject.controller.dto.CreateDrugResponseDto;
-import com.example.firstproject.controller.dto.GetDrugDto;
+import com.example.firstproject.controller.dto.drug.CreateDrugResponseDto;
+import com.example.firstproject.controller.dto.drug.GetDrugDto;
 import com.example.firstproject.service.DrugService;
-import com.example.firstproject.structure.entity.DrugEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.example.firstproject.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
@@ -18,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/drugs")
 public class DrugController {
 
-    private DrugService drugService;
+    private final DrugService drugService;
 
     @Autowired
     public DrugController(DrugService drugService) {
@@ -26,7 +22,7 @@ public class DrugController {
     }
 
     @GetMapping()
-    public List<GetDrugDto> getAllDrugs() {
+    public List<GetDrugDto > getAllDrugs() {
         return drugService.getAllDrugs();
 
     }

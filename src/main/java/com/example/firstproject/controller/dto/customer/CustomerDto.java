@@ -1,17 +1,16 @@
-package com.example.firstproject.service.models;
+package com.example.firstproject.controller.dto.customer;
 
-public class CustomerModel {
-
-    private Long id;
+public class CustomerDto {
+    private long id;
     private String name;
     private String surname;
     private String email;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -39,7 +38,7 @@ public class CustomerModel {
         this.email = email;
     }
 
-    public CustomerModel(Long id, String name, String surname, String email) {
+    public CustomerDto(long id, String name, String surname, String email) {
         this.id = id;
         this.name = name;
         this.surname = surname;

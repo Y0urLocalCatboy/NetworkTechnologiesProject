@@ -1,9 +1,9 @@
 package com.example.firstproject.service;
 
-import com.example.firstproject.controller.dto.CreateDrugDto;
-import com.example.firstproject.controller.dto.CreateDrugResponseDto;
-import com.example.firstproject.controller.dto.DrugDto;
-import com.example.firstproject.controller.dto.GetDrugDto;
+import com.example.firstproject.controller.dto.drug.CreateDrugResponseDto;
+import com.example.firstproject.controller.dto.drug.CreateDrugDto;
+import com.example.firstproject.controller.dto.drug.DrugDto;
+import com.example.firstproject.controller.dto.drug.GetDrugDto;
 import com.example.firstproject.service.models.DrugModel;
 import com.example.firstproject.structure.entity.DrugEntity;
 import com.example.firstproject.structure.repository.DrugRepository;
