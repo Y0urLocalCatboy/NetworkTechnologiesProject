@@ -1,9 +1,14 @@
 package com.example.firstproject.controller.dto.login;
 
+import jakarta.validation.constraints.NotNull;
+
 public class LoginRequestDto {
 
+    @NotNull
     private String email;
+    @NotNull
     private String password;
+
 
     public String getEmail() {
         return email;
