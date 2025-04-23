@@ -1,12 +1,13 @@
 package com.example.firstproject.controller.dto.login;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class LoginRequestDto {
 
-    @NotNull
+    @NotBlank(message = "Email is required")
     private String email;
-    @NotNull
+    @NotNull(message = "Password is required")
     private String password;
 
 
@@ -24,5 +25,8 @@ public class LoginRequestDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public LoginRequestDto() {
     }
 }

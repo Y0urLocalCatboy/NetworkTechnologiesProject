@@ -9,6 +9,7 @@ import com.example.firstproject.service.models.CustomerModel;
 import com.example.firstproject.structure.entity.CustomerEntity;
 import com.example.firstproject.structure.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +18,12 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<GetCustomerDto> getAllCustomers() {
@@ -49,7 +52,7 @@ public class CustomerService {
         customerEntity.setName(customer.getName());
         customerEntity.setSurname(customer.getSurname());
         customerEntity.setEmail(customer.getEmail());
-        customerEntity.setPassword(customer.getPassword());
+        customerEntity.setPassword(passwordEncoder.encode(customer.getPassword()));
         var savedCustomer = customerRepository.save(customerEntity);
 
         return new CreateCustomerResponseDto(savedCustomer.getId(), savedCustomer.getName(), savedCustomer.getSurname(), savedCustomer.getEmail(),savedCustomer.getShopcart());

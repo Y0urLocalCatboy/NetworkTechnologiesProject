@@ -1,5 +1,6 @@
 package com.example.firstproject.service;
 
+import com.example.firstproject.structure.entity.CustomerEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -13,17 +14,19 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final String SECRET = "secretkdsafsadfasfsaffsafsafsafsafsafvxasfakfjsahgjaey";
+    private final String SECRET = "mySuperSecretKeyWithAtLeast32Characters123!";
     private final long TOKEN_VALIDITY = 1000*60*60;
 
-    public String createToken(String email){
+    public String createToken(CustomerEntity customer){
         long now = System.currentTimeMillis();
-        var token = Jwts.builder().subject(email)
-                .claim("roles","Customer")
+        var token = Jwts.builder()
+                .subject(customer.getEmail())
+                .claim("id", customer.getId())
                 .issuedAt(new Date(now))
                 .expiration(new Date(now+(TOKEN_VALIDITY)))
-                .signWith(Keys.hmacShaKeyFor(SECRET.getBytes()));
-        return token.compact();
+                .signWith(generateKey())
+                .compact();
+        return token;
     }
 
     public boolean verifyToken(String token) {
@@ -34,7 +37,7 @@ public class JwtService {
         return getExpirationDate(token).before(new Date());
     }
 
-    public String getUsername(String token) {
+    public String getEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 

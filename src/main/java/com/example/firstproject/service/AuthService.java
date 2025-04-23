@@ -32,7 +32,7 @@ public class AuthService {
         }
 
 
-        return new LoginResponseDto(jwtService.createToken(customer.getEmail()));
+        return new LoginResponseDto(jwtService.createToken(customer));
 
     }
 }

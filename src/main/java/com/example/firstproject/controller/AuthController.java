@@ -3,6 +3,7 @@ package com.example.firstproject.controller;
 import com.example.firstproject.controller.dto.login.LoginRequestDto;
 import com.example.firstproject.controller.dto.login.LoginResponseDto;
 import com.example.firstproject.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @PreAuthorize("permitAll()")
-    public LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         return authService.login(loginRequestDto);
     }
 }
