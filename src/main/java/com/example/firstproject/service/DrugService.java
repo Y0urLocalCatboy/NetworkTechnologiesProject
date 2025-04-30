@@ -4,6 +4,7 @@ import com.example.firstproject.controller.dto.drug.CreateDrugResponseDto;
 import com.example.firstproject.controller.dto.drug.CreateDrugDto;
 import com.example.firstproject.controller.dto.drug.DrugDto;
 import com.example.firstproject.controller.dto.drug.GetDrugDto;
+import com.example.firstproject.service.errors.DrugNotFoundError;
 import com.example.firstproject.service.models.DrugModel;
 import com.example.firstproject.structure.entity.DrugEntity;
 import com.example.firstproject.structure.repository.DrugRepository;
@@ -39,7 +40,7 @@ public class DrugService {
     }
 
     public GetDrugDto getDrugById(Long id) {
-        var drugEntity = drugRepository.findById(id).orElseThrow(() -> new RuntimeException("Drug hans't been found"));
+        var drugEntity = drugRepository.findById(id).orElseThrow(() -> new DrugNotFoundError());
         return new GetDrugDto(drugEntity.getId(), drugEntity.getName(), drugEntity.getDescription(), drugEntity.getPrice(), drugEntity.getQuantity(), drugEntity.getManufacturer());
     }
 
@@ -57,7 +58,7 @@ public class DrugService {
 
     public void deleteDrug(Long id) {
     if(!drugRepository.existsById(id)) {
-        throw new RuntimeException("Drug not found");
+         new DrugNotFoundError();
     }
         drugRepository.deleteById(id);
     }
