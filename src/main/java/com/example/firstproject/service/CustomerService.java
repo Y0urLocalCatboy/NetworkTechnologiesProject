@@ -29,7 +29,7 @@ public class CustomerService {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
+//test
     public List<GetCustomerDto> getAllCustomers() {
         var customers = customerRepository.findAll();
         return customers.stream()
