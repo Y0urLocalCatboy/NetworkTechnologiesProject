@@ -31,6 +31,10 @@ public class CustomerEntity {
     @Column(name = "Shopcart")
     private String shopcart = "";
 
+    @Basic
+    @Column(name = "role")
+    private String role = "USER";
+
     public String getPassword() {
         return password;
     }
@@ -77,5 +81,13 @@ public class CustomerEntity {
 
     public void setShopcart(String shopcart) {
         this.shopcart = shopcart;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

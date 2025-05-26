@@ -14,6 +14,10 @@ public class CreateCustomerResponseDto {
 
     private String password;
 
+    // Default constructor for JSON deserialization
+    public CreateCustomerResponseDto() {
+    }
+
     public CreateCustomerResponseDto(Long id, String name, String surname, String email, String password) {
         this.id = id;
         this.name = Name.create(name).getValue();

@@ -22,6 +22,7 @@ public class JwtService {
         var token = Jwts.builder()
                 .subject(customer.getEmail())
                 .claim("id", customer.getId())
+                .claim("role", customer.getRole())
                 .issuedAt(new Date(now))
                 .expiration(new Date(now+(TOKEN_VALIDITY)))
                 .signWith(generateKey())
@@ -39,6 +40,10 @@ public class JwtService {
 
     public String getEmail(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String getRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
     }
 
     public Date getExpirationDate(String token) {

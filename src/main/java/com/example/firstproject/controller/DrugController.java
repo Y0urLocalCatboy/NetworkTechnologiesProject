@@ -2,7 +2,9 @@ package com.example.firstproject.controller;
 
 import com.example.firstproject.controller.dto.drug.CreateDrugResponseDto;
 import com.example.firstproject.controller.dto.drug.GetDrugDto;
+import com.example.firstproject.controller.dto.drug.UpdateDrugDto;
 import com.example.firstproject.service.DrugService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,9 +26,22 @@ public class DrugController {
     }
 
     @GetMapping()
-    public List<GetDrugDto > getAllDrugs() {
-        return drugService.getAllDrugs();
+    public ResponseEntity<?> getAllDrugs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction) {
 
+        if (page < 0 || size <= 0) {
+            return ResponseEntity.badRequest().body("Invalid page or size parameters");
+        }
+
+        try {
+            Page<GetDrugDto> drugPage = drugService.getAllDrugsPaged(page, size, sort, direction);
+            return ResponseEntity.ok(drugPage);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
@@ -52,5 +67,17 @@ public class DrugController {
     public ResponseEntity<Object> deleteDrug(@PathVariable Long id) {
         drugService.deleteDrug(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public GetDrugDto updateDrug(@PathVariable Long id, @RequestBody UpdateDrugDto updateDrugDto) {
+        return drugService.updateDrug(id, updateDrugDto);
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public GetDrugDto partialUpdateDrug(@PathVariable Long id, @RequestBody UpdateDrugDto updateDrugDto) {
+        return drugService.updateDrug(id, updateDrugDto);
     }
 }
