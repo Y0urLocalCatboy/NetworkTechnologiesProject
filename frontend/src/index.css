@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.container {
+  padding: 20px;
+}
+
+.page-title {
+  margin-bottom: 20px;
+}
+
+.form-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+.button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
