@@ -23,7 +23,7 @@ const Dashboard = () => {
         const response = await axios.get('/api/drugs?page=0&size=4');
         setDrugs(response.data.content || []);
       } catch (err) {
-        setError(err.toString);
+        setError(err);
       }
     };
 

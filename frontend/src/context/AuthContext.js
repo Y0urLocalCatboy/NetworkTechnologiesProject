@@ -16,17 +16,14 @@ export const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       setIsLoading(true);
       try {
-        // Check if token exists and set it for axios
         const hasToken = authService.initializeAuth();
         
         if (hasToken) {
-          // Get current user data
           const userData = await authService.getCurrentUser();
           if (userData) {
             setUser(userData);
             setIsAuthenticated(true);
           } else {
-            // Token invalid or expired
             authService.logout();
             setIsAuthenticated(false);
           }
@@ -42,7 +39,6 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
-  // Login function
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
@@ -60,14 +56,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout function
   const logout = () => {
     authService.logout();
     setUser(null);
     setIsAuthenticated(false);
   };
 
-  // Register function
   const register = async (userData) => {
     setIsLoading(true);
     setError(null);
@@ -75,14 +69,13 @@ export const AuthProvider = ({ children }) => {
       const data = await authService.register(userData);
       return data;
     } catch (err) {
-      setError(err.message || 'Registration failed');
+      setError(err.message || 'rejestracja jakims cudem');
       throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Context value
   const value = {
     user,
     isAuthenticated,
@@ -96,7 +89,6 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Custom hook to use auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
