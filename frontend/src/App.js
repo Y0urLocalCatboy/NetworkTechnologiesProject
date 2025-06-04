@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-// Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -12,13 +11,10 @@ import DrugList from './pages/DrugList';
 import DrugDetail from './pages/DrugDetail';
 import NotFound from './pages/NotFound';
 
-// Components
 import Layout from './components/Layout';
 
-// Auth context
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-// Theme
 const theme = createTheme({
   palette: {
     primary: {
@@ -30,7 +26,6 @@ const theme = createTheme({
   },
 });
 
-// Protected route component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
