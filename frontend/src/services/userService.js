@@ -42,7 +42,6 @@ const registerUser = async (userData) => {
   }
 };
 
-// Update a user
 const updateUser = async (id, userData) => {
   try {
     const response = await axios.put(`${API_URL}/${id}`, userData);
@@ -52,7 +51,6 @@ const updateUser = async (id, userData) => {
   }
 };
 
-// Partially update a user
 const partialUpdateUser = async (id, userData) => {
   try {
     const response = await axios.patch(`${API_URL}/${id}`, userData);
@@ -62,7 +60,6 @@ const partialUpdateUser = async (id, userData) => {
   }
 };
 
-// Delete a user
 const deleteUser = async (id) => {
   try {
     await axios.delete(`${API_URL}/${id}`);

@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_URL = '/api/drugs';
 
-// Get all drugs with pagination and sorting
 const getAllDrugs = async (page = 0, size = 10, sort = 'id', direction = 'asc') => {
   try {
     const response = await axios.get(`${API_URL}?page=${page}&size=${size}&sort=${sort}&direction=${direction}`);
@@ -12,7 +11,6 @@ const getAllDrugs = async (page = 0, size = 10, sort = 'id', direction = 'asc') 
   }
 };
 
-// Get a single drug by ID
 const getDrugById = async (id) => {
   try {
     const response = await axios.get(`${API_URL}/${id}`);
@@ -22,7 +20,6 @@ const getDrugById = async (id) => {
   }
 };
 
-// Create a new drug (admin only)
 const createDrug = async (drugData) => {
   try {
     const response = await axios.post(API_URL, drugData);
@@ -32,7 +29,6 @@ const createDrug = async (drugData) => {
   }
 };
 
-// Update a drug (admin only)
 const updateDrug = async (id, drugData) => {
   try {
     const response = await axios.put(`${API_URL}/${id}`, drugData);
@@ -42,7 +38,6 @@ const updateDrug = async (id, drugData) => {
   }
 };
 
-// Partially update a drug (admin only)
 const partialUpdateDrug = async (id, drugData) => {
   try {
     const response = await axios.patch(`${API_URL}/${id}`, drugData);
@@ -52,7 +47,6 @@ const partialUpdateDrug = async (id, drugData) => {
   }
 };
 
-// Delete a drug (admin only)
 const deleteDrug = async (id) => {
   try {
     await axios.delete(`${API_URL}/${id}`);

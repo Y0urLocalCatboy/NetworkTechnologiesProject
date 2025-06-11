@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_URL = '/api/auth';
 
-// Login user
 const login = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/login`, { email, password });
@@ -15,12 +14,10 @@ const login = async (email, password) => {
   }
 };
 
-// Logout user
 const logout = () => {
   localStorage.removeItem('token');
 };
 
-// Get current user info
 const getCurrentUser = async () => {
   try {
     const token = localStorage.getItem('token');
@@ -40,7 +37,6 @@ const getCurrentUser = async () => {
   }
 };
 
-// Register new user
 const register = async (userData) => {
   try {
     const response = await axios.post('/api/users/register', userData);
@@ -50,7 +46,6 @@ const register = async (userData) => {
   }
 };
 
-// Set token for all requests
 const setAuthToken = (token) => {
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -59,7 +54,6 @@ const setAuthToken = (token) => {
   }
 };
 
-// Initialize - set token if exists
 const initializeAuth = () => {
   const token = localStorage.getItem('token');
   if (token) {

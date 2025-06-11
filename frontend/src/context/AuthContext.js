@@ -1,17 +1,14 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import authService from '../services/authService';
 
-// Create context
 const AuthContext = createContext();
 
-// Provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Initialize auth state
   useEffect(() => {
     const initAuth = async () => {
       setIsLoading(true);
