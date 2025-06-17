@@ -20,7 +20,7 @@ const Profile = () => {
         const response = await axios.get('/api/users/me');
         setProfile(response.data);
       } catch (err) {
-        setError(err.toString);
+        setError(err);
       }
     };
 

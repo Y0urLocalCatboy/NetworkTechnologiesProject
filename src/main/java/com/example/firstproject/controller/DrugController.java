@@ -1,8 +1,6 @@
 package com.example.firstproject.controller;
 
-import com.example.firstproject.controller.dto.drug.CreateDrugResponseDto;
-import com.example.firstproject.controller.dto.drug.GetDrugDto;
-import com.example.firstproject.controller.dto.drug.UpdateDrugDto;
+import com.example.firstproject.controller.dto.drug.*;
 import com.example.firstproject.service.DrugService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -11,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/drugs")
@@ -25,7 +22,7 @@ public class DrugController {
         this.drugService = drugService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getAllDrugs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -35,35 +32,38 @@ public class DrugController {
         if (page < 0 || size <= 0) {
             return ResponseEntity.badRequest().body("Invalid page or size parameters");
         }
-
-        try {
-            Page<GetDrugDto> drugPage = drugService.getAllDrugsPaged(page, size, sort, direction);
-            return ResponseEntity.ok(drugPage);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        }
+        Page<GetDrugDto> drugPage = drugService.getAllDrugsPaged(page, size, sort, direction);
+        return ResponseEntity.ok(drugPage);
     }
 
     @GetMapping("/{id}")
-    public GetDrugDto
-    getDrugById(@PathVariable Long id) {
-        return drugService.getDrugById(id);
+    public ResponseEntity<GetDrugDto> getDrugById(@PathVariable Long id) {
+        GetDrugDto drugDto = drugService.getDrugById(id);
+        return ResponseEntity.ok(drugDto);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    // Zaktualizowany endpoint createDrug
     @PostMapping
-    public CreateDrugResponseDto createDrug(@Validated @RequestBody CreateDrugResponseDto drug) {
-        var newDrug = drugService.createDrug(drug);
-        return newDrug;
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<GetDrugDto> createDrug(@Validated @RequestBody AddDrugRequest addDrugRequest) {
+        GetDrugDto newDrug = drugService.createDrug(addDrugRequest);
+        return new ResponseEntity<>(newDrug, HttpStatus.CREATED);
     }
 
-//    @PostMapping
-//    public ResponseEntity<CreateDrugResponseDto> createDrug(@Validated @RequestBody CreateDrugResponseDto drug) {
-//        var newDrug = drugService.createDrug(drug);
-//        return new ResponseEntity<>(newDrug, HttpStatus.BAD_GATEWAY);
-//    }
+    // Dodany endpoint buyDrug
+    @PostMapping("/buy")
+    public ResponseEntity<BuyDrugResponse> buyDrug(@Validated @RequestBody BuyDrugRequest buyDrugRequest) {
+        BuyDrugResponse response = drugService.processDrugPurchase(buyDrugRequest);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> deleteDrug(@PathVariable Long id) {
         drugService.deleteDrug(id);
         return ResponseEntity.noContent().build();
@@ -71,13 +71,15 @@ public class DrugController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public GetDrugDto updateDrug(@PathVariable Long id, @RequestBody UpdateDrugDto updateDrugDto) {
-        return drugService.updateDrug(id, updateDrugDto);
+    public ResponseEntity<GetDrugDto> updateDrug(@PathVariable Long id, @Validated @RequestBody UpdateDrugDto updateDrugDto) {
+        GetDrugDto updatedDrug = drugService.updateDrug(id, updateDrugDto);
+        return ResponseEntity.ok(updatedDrug);
     }
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public GetDrugDto partialUpdateDrug(@PathVariable Long id, @RequestBody UpdateDrugDto updateDrugDto) {
-        return drugService.updateDrug(id, updateDrugDto);
+    public ResponseEntity<GetDrugDto> partialUpdateDrug(@PathVariable Long id, @Validated @RequestBody UpdateDrugDto updateDrugDto) {
+        GetDrugDto updatedDrug = drugService.updateDrug(id, updateDrugDto);
+        return ResponseEntity.ok(updatedDrug);
     }
 }
