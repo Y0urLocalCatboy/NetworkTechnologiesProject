@@ -42,7 +42,6 @@ public class DrugController {
         return ResponseEntity.ok(drugDto);
     }
 
-    // Zaktualizowany endpoint createDrug
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
@@ -51,7 +50,6 @@ public class DrugController {
         return new ResponseEntity<>(newDrug, HttpStatus.CREATED);
     }
 
-    // Dodany endpoint buyDrug
     @PostMapping("/buy")
     public ResponseEntity<BuyDrugResponse> buyDrug(@Validated @RequestBody BuyDrugRequest buyDrugRequest) {
         BuyDrugResponse response = drugService.processDrugPurchase(buyDrugRequest);

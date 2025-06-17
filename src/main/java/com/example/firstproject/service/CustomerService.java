@@ -33,7 +33,11 @@ public class CustomerService {
     public List<GetCustomerDto> getAllCustomers() {
         var customers = customerRepository.findAll();
         return customers.stream()
-                .map(customer -> new GetCustomerDto(customer.getId(), customer.getName(), customer.getSurname(), customer.getEmail(), customer.getShopcart()))
+                .map(customer -> new GetCustomerDto(customer.getId(),
+                        customer.getName(),
+                        customer.getSurname(),
+                        customer.getEmail(),
+                        customer.getShopcart()))
                 .toList();
     }
 
@@ -61,7 +65,11 @@ public class CustomerService {
                 .filter(customer -> customer.getName().equalsIgnoreCase(name))
                 .toList();
         return customers.stream()
-                .map(customer -> new GetCustomerDto(customer.getId(), customer.getName(), customer.getSurname(), customer.getEmail(),customer.getShopcart()))
+                .map(customer -> new GetCustomerDto(customer.getId(),
+                        customer.getName(),
+                        customer.getSurname(),
+                        customer.getEmail(),
+                        customer.getShopcart()))
                 .toList();
     }
 
@@ -72,7 +80,11 @@ public class CustomerService {
 
     public GetCustomerDto getCustomerByEmail(String email) {
         var customerEntity = customerRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Customer hasn't been found"));
-        return new GetCustomerDto(customerEntity.getId(), customerEntity.getName(), customerEntity.getSurname(), customerEntity.getEmail(), customerEntity.getShopcart());
+        return new GetCustomerDto(customerEntity.getId(),
+                customerEntity.getName(),
+                customerEntity.getSurname(),
+                customerEntity.getEmail(),
+                customerEntity.getShopcart());
     }
 
     public CreateCustomerResponseDto createCustomer(CreateCustomerResponseDto customer) {
@@ -83,7 +95,11 @@ public class CustomerService {
         customerEntity.setPassword(passwordEncoder.encode(customer.getPassword()));
         var savedCustomer = customerRepository.save(customerEntity);
 
-        return new CreateCustomerResponseDto(savedCustomer.getId(), savedCustomer.getName(), savedCustomer.getSurname(), savedCustomer.getEmail(),savedCustomer.getShopcart());
+        return new CreateCustomerResponseDto(savedCustomer.getId(),
+                savedCustomer.getName(),
+                savedCustomer.getSurname(),
+                savedCustomer.getEmail(),
+                savedCustomer.getShopcart());
     }
 
     public void deleteCustomer(Long id) {

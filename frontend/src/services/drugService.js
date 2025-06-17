@@ -26,7 +26,7 @@ const getDrugById = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Error in getDrugById:", error.response?.data || error.message);
-    throw error.response?.data || { message: 'An error occurred while fetching the drug' };
+    throw error.response?.data || error.message || { message: 'An error occurred while fetching the drug' };
   }
 };
 

@@ -1,222 +1,146 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import drugService from '../services/drugService';
 import {
   Typography,
   Box,
   Card,
   CardContent,
-  TextField,
+  CardActions,
   Button,
   CircularProgress,
   Alert,
-  Grid
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TablePagination
 } from '@mui/material';
+import { toast } from 'react-toastify';
 
-const DrugDetail = () => {
-  const { id } = useParams();
+const DrugListPage = () => {
   const navigate = useNavigate();
-  const [drug, setDrug] = useState(null);
+  const [drugs, setDrugs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalElements, setTotalElements] = useState(0);
 
-  const [newDrug, setNewDrug] = useState({
-    name: '',
-    description: '',
-    price: '',
-    stock: ''
-  });
+  const fetchDrugs = useCallback(async (currentPage, currentRowsPerPage) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await drugService.getAllDrugs(currentPage, currentRowsPerPage, 'name', 'asc');
+      if (data && Array.isArray(data.content)) {
+        setDrugs(data.content);
+        setTotalElements(data.totalElements || 0);
+      } else {
+        console.error("Unexpected data structure from getAllDrugs:", data);
+        setDrugs([]);
+        setTotalElements(0);
+        setError('Received invalid data format for drugs list.');
+      }
+    } catch (err) {
+      console.error('Error fetching drugs:', err);
+      setError('Error fetching drugs: ' + (err.message || 'Unknown error'));
+      setDrugs([]);
+      setTotalElements(0);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    if (id === 'add') {
-      setLoading(false);
-      return;
-    }
+    fetchDrugs(page, rowsPerPage);
+  }, [fetchDrugs, page, rowsPerPage]);
 
-    const fetchDrug = async () => {
-      try {
-        const response = await axios.get(`/api/drugs/${id}`);
-        setDrug(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching drug details:', err);
-        setError('Error during fetching drug details');
-        setLoading(false);
-      }
-    };
-
-    fetchDrug();
-  }, [id]);
-
-  const handleQuantityChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (value > 0 && drug && value <= drug.stock) {
-      setQuantity(value);
-    }
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  const handleBuyDrug = async () => {
-    try {
-      await axios.post(`/api/drugs/${id}/buy`, { quantity });
-      toast.success('Drug purchased successfully!');
-      const response = await axios.get(`/api/drugs/${id}`);
-      setDrug(response.data);
-    } catch (err) {
-      toast.error('Error while buying drug: ' + (err.response?.data?.message || err.message));
-    }
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewDrug({
-      ...newDrug,
-      [name]: value
-    });
+  const handleViewDetails = (drugId) => {
+    navigate(`/drugs/${drugId}`);
   };
 
-  const handleAddDrug = async (e) => {
-    e.preventDefault();
-    try {
-      const drugData = {
-        name: newDrug.name,
-        description: newDrug.description,
-        price: parseFloat(newDrug.price),
-        stock: parseInt(newDrug.stock, 10)
-      };
-
-      const response = await axios.post('/api/drugs', drugData);
-
-      toast.success('Drug added successfully!');
-      navigate(`/drugs/${response.data.id}`);
-    } catch (err) {
-      toast.error('Error adding drug: ' + (err.response?.data?.message || err.message));
-    }
+  const handleAddDrug = () => {
+    navigate('/drugs/add');
   };
 
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
-
-  if (id === 'add') {
-    return (
-        <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
-          <Card>
-            <CardContent>
-              <Typography variant="h4" gutterBottom>Add New Drug</Typography>
-              <Box component="form" onSubmit={handleAddDrug} sx={{ mt: 2 }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                        name="name"
-                        label="Drug Name"
-                        fullWidth
-                        required
-                        value={newDrug.name}
-                        onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                        name="description"
-                        label="Description"
-                        fullWidth
-                        multiline
-                        rows={4}
-                        value={newDrug.description}
-                        onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                        name="price"
-                        label="Price"
-                        fullWidth
-                        required
-                        type="number"
-                        inputProps={{ min: 0, step: "0.01" }}
-                        value={newDrug.price}
-                        onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                        name="stock"
-                        label="Stock Quantity"
-                        fullWidth
-                        required
-                        type="number"
-                        inputProps={{ min: 0 }}
-                        value={newDrug.stock}
-                        onChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        sx={{ mt: 2 }}
-                    >
-                      Add Drug
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
-    );
-  }
-
-  if (error) return <Alert severity="error">{error}</Alert>;
-  if (!drug) return <Alert severity="warning">Drug not found</Alert>;
+  if (error) return <Alert severity="error" sx={{ m: 2 }}>{error}</Alert>;
 
   return (
-      <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
-        <Card>
-          <CardContent>
-            <Typography variant="h4" gutterBottom>{drug.name}</Typography>
+      <Box sx={{ maxWidth: 1000, mx: 'auto', p: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h4" gutterBottom>
+            Drug List
+          </Typography>
+          <Button variant="contained" color="primary" onClick={handleAddDrug}>
+            Add New Drug
+          </Button>
+        </Box>
 
-            <Box sx={{ my: 2 }}>
-              <Typography variant="body1">{drug.description}</Typography>
-              <Typography variant="h6" sx={{ mt: 2 }}>Price: ${drug.price}</Typography>
-              <Typography variant="body2">Available: {drug.stock} pcs</Typography>
-            </Box>
-
-            <Box sx={{ mt: 4, borderTop: '1px solid #eee', pt: 2 }}>
-              <Typography variant="h5" gutterBottom>Purchase Drug</Typography>
-
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Typography sx={{ mr: 2 }}>Quantity:</Typography>
-                <TextField
-                    type="number"
-                    size="small"
-                    value={quantity}
-                    onChange={handleQuantityChange}
-                    inputProps={{ min: 1, max: drug.stock }}
-                    disabled={drug.stock <= 0}
-                />
-              </Box>
-
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Total price: ${(drug.price * quantity).toFixed(2)}
-              </Typography>
-
-              <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleBuyDrug}
-                  disabled={drug.stock <= 0}
-                  fullWidth
-              >
-                {drug.stock > 0 ? 'Buy Now' : 'Out of Stock'}
-              </Button>
-            </Box>
-          </CardContent>
-        </Card>
+        {drugs.length === 0 && !loading ? (
+            <Alert severity="info">No drugs found.</Alert>
+        ) : (
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+              <TableContainer>
+                <Table stickyHeader aria-label="drug table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Manufacturer</TableCell>
+                      <TableCell align="right">Price</TableCell>
+                      <TableCell align="right">Quantity</TableCell>
+                      <TableCell align="center">Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {drugs.map((drug) => (
+                        <TableRow hover role="checkbox" tabIndex={-1} key={drug.id}>
+                          <TableCell component="th" scope="row">
+                            {drug.name}
+                          </TableCell>
+                          <TableCell>{drug.manufacturer || 'N/A'}</TableCell>
+                          <TableCell align="right">${drug.price != null ? drug.price.toFixed(2) : 'N/A'}</TableCell>
+                          <TableCell align="right">{drug.quantity != null ? drug.quantity : 'N/A'}</TableCell>
+                          <TableCell align="center">
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                onClick={() => handleViewDetails(drug.id)}
+                            >
+                              View Details
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  component="div"
+                  count={totalElements}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+        )}
       </Box>
   );
 };
 
-export default DrugDetail;
+export default DrugListPage;

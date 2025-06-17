@@ -36,7 +36,7 @@ const DrugDetail = () => {
         setError(null);
       } catch (err) {
         console.error('Error fetching drug details:', err);
-        setError('Error fetching drug details: ' + (err.message || 'Unknown error'));
+        setError('Error fetching drug details: ' + (err.toString() || 'Unknown error'));
         setDrug(null);
       } finally {
         setLoading(false);

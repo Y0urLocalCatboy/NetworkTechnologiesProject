@@ -11,6 +11,8 @@ import {
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import drugService from '../services/drugService';
+
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -20,10 +22,12 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDrugs = async () => {
       try {
-        const response = await axios.get('/api/drugs?page=0&size=4');
-        setDrugs(response.data.content || []);
+        const data = await drugService.getAllDrugs(0, 4);
+        setDrugs(data.content || []);
+        setError('');
       } catch (err) {
-        setError(err.message);
+        console.error('Error fetching drugs for dashboard:', err);
+        setError(err.message || 'Failed to fetch drugs');
       }
     };
 

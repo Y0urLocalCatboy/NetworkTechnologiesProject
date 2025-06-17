@@ -73,7 +73,12 @@ public class DrugService {
 
     public GetDrugDto getDrugById(Long id) {
         var drugEntity = drugRepository.findById(id).orElseThrow(DrugNotFoundError::new);
-        return new GetDrugDto(drugEntity.getId(), drugEntity.getName(), drugEntity.getDescription(), drugEntity.getPrice(), drugEntity.getQuantity(), drugEntity.getManufacturer());
+        return new GetDrugDto(drugEntity.getId(),
+                drugEntity.getName(),
+                drugEntity.getDescription(),
+                drugEntity.getPrice(),
+                drugEntity.getQuantity(),
+                drugEntity.getManufacturer());
     }
 
     public void deleteDrug(Long id) {

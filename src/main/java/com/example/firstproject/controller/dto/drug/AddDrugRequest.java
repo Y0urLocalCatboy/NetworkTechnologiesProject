@@ -56,7 +56,6 @@ public class AddDrugRequest {
         this.stock = stock;
     }
 
-    // Dodane gettery i settery dla manufacturer
     public String getManufacturer() {
         return manufacturer;
     }
